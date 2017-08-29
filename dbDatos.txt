@@ -1,0 +1,3 @@
+username: efutbol_db
+clave:123Root
+cadena de conexion: mongodb://efutbol_db:123Root@ds111204.mlab.com:11204/efutbol_db
