@@ -4,6 +4,7 @@
 var path = require('path');
 var fs = require('fs');
 var Estadio = require('../models/estadio.model');
+
 //medtodo para subir imagenes
 function saveEstadio(req,res){
     var estadio=new Estadio();
@@ -70,7 +71,7 @@ function uploadImage(req, res){
 	var file_name = 'No subido...';
 
 	if(req.files){
-		var file_path = req.files.image.path;
+		var file_path = req.files.imagen_estadio.path;
 		var file_split = file_path.split('\\');
 		var file_name = file_split[3];
 
