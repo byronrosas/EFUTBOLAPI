@@ -6,9 +6,9 @@ var UsuarioSchema = Schema({
     nombre_usuario: String,
     apellido_usuario: String,
     cedula_usuario:String,
-    email: String,
-    password: String,
-    image: String,
+    email_usuario: String,
+    password_usuario: String,
+    image_usuario: String,
     fecha_nacimiento_usuario:Date,
     genero_usuario:String    
 });

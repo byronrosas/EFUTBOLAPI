@@ -10,19 +10,19 @@ function saveUser(req, res){
 	var user = new User();
 	var params = req.body;
 	console.log(params);
-	user.nombre_usuario = params.nombre;
-	user.apellido_usuario = params.apellido;
-	user.email = params.email;
-    user.cedula_usuario = params.cedula;
-    user.password = params.password;
-    user.fecha_nacimiento_usuario=params.fecha_nacimiento;
-    user.genero_usuario=params.genero;
-  	user.image = 'null';
+	user.nombre_usuario = params.nombre_usuario;
+	user.apellido_usuario = params.apellido_usuario;
+	user.email_usuario = params.email_usuario;
+    user.cedula_usuario = params.cedula_usuario;
+    user.password_usuario = params.password_usuario;
+    user.fecha_nacimiento_usuario=params.fecha_nacimiento_usuario;
+    user.genero_usuario=params.genero_usuario;
+  	user.image_usuario = 'null';
 
-	if(params.password){
+	if(params.password_usuario){
 		// Encriptar contraseña
-		bcrypt.hash(params.password, null, null, function(err, hash){
-			user.password = hash;
+		bcrypt.hash(params.password_usuario, null, null, function(err, hash){
+			user.password_usuario = hash;
 
 			if(user.nombre_usuario != null && user.apellido_usuario != null && user.cedula_usuario != null){
 				// Guardar el usuario
@@ -61,9 +61,9 @@ function loginUser(req, res){
 			if(!user){
 				res.status(404).send({user: 'El usuario no existe'});
 			}else{
-
+				console.log(user);
 				// Comprobar la contraseña
-				bcrypt.compare(password, user.password, function(err, check){
+				bcrypt.compare(password, user.password_usuario, function(err, check){
 					if(check){
 						//devolver los datos del usuario logueado
 						if(params.gethash){
@@ -109,7 +109,7 @@ function uploadImage(req, res){
 	var file_name = 'No subido...';
 
 	if(req.files){
-		var file_path = req.files.image.path;
+		var file_path = req.files.image_usuario.path;
 		var file_split = file_path.split('\\');
 		var file_name = file_split[2];
 
@@ -118,7 +118,7 @@ function uploadImage(req, res){
 
 		if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif'){
 
-			User.findByIdAndUpdate(userId, {image: file_name}, (err, userUpdated) => {
+			User.findByIdAndUpdate(userId, {image_usuario: file_name}, (err, userUpdated) => {
 				if(!userUpdated){
 					res.status(404).send({message: 'No se ha podido actualizar el usuario'});
 				}else{
