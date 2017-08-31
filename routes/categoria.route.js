@@ -10,6 +10,6 @@ api.post('/guardar',md_auth.ensureAuth,CategoriaController.saveCategoria);
 api.get('/',CategoriaController.getCategorias);
 api.get('/:id',CategoriaController.getCategoriaById);
 api.put('/actualizar/:id',md_auth.ensureAuth,CategoriaController.updateCategoria);
-
+api.put('/agregarEquipo/:id',md_auth.ensureAuth,CategoriaController.updateEquipoCategoria);
 module.exports = api;
 

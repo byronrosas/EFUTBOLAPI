@@ -11,7 +11,7 @@ function saveTemporada(req,res){
     temporada.nombre_temporada = params.nombre_temporada;
     temporada.fecha_inicio = params.fecha_inicio;
     temporada.fecha_fin = params.fecha_fin;
-    temporada.id_usario = params.id_usario;
+    temporada.id_usuario = params.id_usuario;
 
     temporada.save((err,temporadaGuardada) => {
         if(err){

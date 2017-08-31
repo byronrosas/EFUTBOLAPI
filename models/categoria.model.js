@@ -5,7 +5,11 @@ var CategoriaSchema = Schema({
     nombre_categoria:String,
     n_equipos_categoria:Number,
     observacion_categoria:String,
-    id_temporada: { type: Schema.ObjectId, ref: 'Temporada'}
+    id_temporada: { type: Schema.ObjectId, ref: 'Temporada'},
+    codigo_equipo:[
+        {type : Schema.ObjectId , ref: 'Equipo', unique: true} 
+    ]
+
 });
 
 module.exports = mongoose.model('Categoria',CategoriaSchema);

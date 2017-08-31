@@ -10,8 +10,7 @@ var EquipoSchema = Schema({
     color_principal_equipo:String,
     color_secundario_equipo:String,
     observacion_equipo:String,
-    //personal_equipo:[{ type : ObjectId, ref: 'Personal' }],
-    id_categoria: { type: Schema.ObjectId, ref: 'Categoria'}
+    personal_equipo:[{ type : Schema.ObjectId, ref: 'Personal' }],
 });
 
 module.exports = mongoose.model('Equipo',EquipoSchema);

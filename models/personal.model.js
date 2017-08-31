@@ -12,7 +12,7 @@ var PersonalShema=new Schema({
     TR_personal:Number,
     sancion_personal:String,
     observacion_personal:String,
-    codigo_equipo: { type: Schema.ObjectId, ref: 'Equipo'}
+    estado_personal:Boolean
 });
 
 module.exports = mongoose.model('Personal',PersonalShema);
