@@ -12,7 +12,8 @@ var PersonalShema=new Schema({
     TR_personal:Number,
     sancion_personal:String,
     observacion_personal:String,
-    estado_personal:Boolean
+    url_foto_personal:String,
+    estado_personal:{type:Boolean,default:true}
 });
 
 module.exports = mongoose.model('Personal',PersonalShema);

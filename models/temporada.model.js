@@ -6,7 +6,9 @@ var TemporadaSchema = Schema({
     nombre_temporada:String,
     fecha_inicio:Date,
     fecha_fin:Date,
-    id_usuario: { type: Schema.ObjectId, ref: 'Usuario'}
+    url_reglamento_temporada:String,
+    id_usuario: { type: Schema.ObjectId, ref: 'Usuario'},
+    estado_temporada:{type:Boolean,default:true}
 });
 
 module.exports = mongoose.model('Temporada',TemporadaSchema);
