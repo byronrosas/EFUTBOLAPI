@@ -13,7 +13,7 @@ var fechaRoute = require('./routes/fecha.route');
 var sancionRoute = require('./routes/sancion.route');
 var categoriaRoute = require('./routes/categoria.route');
 var equipoRoute = require('./routes/equipo.route');
-
+var noticiaRoute=require('./routes/noticia.route');
 var personalRoute = require('./routes/personal.route'); 
 var app = express();
 
@@ -48,6 +48,7 @@ app.use('/fecha',fechaRoute);
 app.use('/sancion',sancionRoute);
 app.use('/categoria',categoriaRoute);
 app.use('/equipo',equipoRoute);
+app.use('/noticia',noticiaRoute);
 
 app.use('/personal',personalRoute);
 // catch 404 and forward to error handler
