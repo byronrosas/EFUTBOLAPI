@@ -8,79 +8,246 @@ var Fecha = require('../models/fecha.model');
 function saveFecha(req,res){
     console.log("Saving Fecha...");
     
-    //Params (equipos[],idCategoria)
+    //Params (equipos[],idCategoria,segunda_vuelta(true|false))
     var params=req.body;
+
     //LOGICA DE ENCUENTROS    
 var equiposId=params.equipos;
 var nEquipos;
 var auxnEquipos;
 var fechas;
-
+var i=0;
+var invertidoEquipo = [];
+for (i=equiposId.length-1; i>=0; i--) {
+  invertidoEquipo.push( equiposId[i] )
+}
 // LOGICA
 nEquipos=equiposId.length;
 
 if((nEquipos%2)==0)
 {
     //Equipos Pares  
+    var fechasInvertidas;    
     fechas=generarMatrizFechas(nEquipos,equiposId);  
+    fechasInvertidas=generarMatrizFechas(nEquipos,invertidoEquipo);  
 }else{
     //Equipos impares
+    var fechasInvertidas;
     auxnEquipos=nEquipos+1;  
     equiposId.push("Descanso");  
     fechas=generarMatrizFechas(auxnEquipos,equiposId);  
+    fechasInvertidas=generarMatrizFechas(auxnEquipos,invertidoEquipo);  
 }
 
 //FIN LOGICA DE ENCUENTROS
-try{    
-    var i=0;
-    for(i in fechas){
-        // Por fechas 
-         
-        console.log(fechas[i]);        
-        fechas[i].forEach(function(f) {
-            var fecha = new Fecha();
-            fecha.n_fecha=i;
-            fecha.estado_fecha=false;
-            fecha.id_categoria=params.id_categoria; 
-            if(f.e1=="Descanso"){
-                fecha.id_equipo1=null;
-            }else{
-                fecha.id_equipo1=f.e1;
-            }
-            
-            if(f.e2=="Descanso"){
-                fecha.id_equipo2=null;
-            }else{
-                fecha.id_equipo2=f.e2;
-            }        
-            
-            fecha.goles_equipo1=0;
-            fecha.tarjetas_amarilla_equipo1=0;
-            fecha.tarjetas_roja_equipo1=0;
-            fecha.observacion_equipo1="No tiene observaciones."
-            fecha.goles_equipo2=0;
-            fecha.tarjetas_amarilla_equipo2=0;
-            fecha.tarjetas_roja_equipo2=0;
-            fecha.observacion_equipo2="No tiene observaciones."
-    
-            fecha.save((err,fechaGuardada) => {
-                if(err){
-                    console.log(err);
-                    res.status(500).send({mensaje: "Error en el servidor"});
-                }else{ 
-                    if (!fechaGuardada) {
-                       throw err;
-                    }                                                                   
+Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
+    if(err){
+        res.status(500).send({ mensaje: "Error en el servidor" });
+    }else{
+        console.log("Creamos de nuevo lo que se removio");
+        if(data){
+            try{    
+                var i=0;
+                
+                    for(i in fechas){
+                        // Por fechas 
+                         
+                        console.log(fechas[i]);        
+                        fechas[i].forEach(function(f) {
+                            var fecha = new Fecha();
+                            fecha.n_fecha=i;
+                            fecha.estado_fecha=false;
+                            fecha.id_categoria=params.id_categoria; 
+                            if(f.e1=="Descanso"){
+                                fecha.id_equipo1=null;
+                            }else{
+                                fecha.id_equipo1=f.e1;
+                            }
+                            
+                            if(f.e2=="Descanso"){
+                                fecha.id_equipo2=null;
+                            }else{
+                                fecha.id_equipo2=f.e2;
+                            }        
+                            
+                            fecha.goles_equipo1=0;
+                            fecha.tarjetas_amarilla_equipo1=0;
+                            fecha.tarjetas_roja_equipo1=0;
+                            fecha.observacion_equipo1="No tiene observaciones."
+                            fecha.goles_equipo2=0;
+                            fecha.tarjetas_amarilla_equipo2=0;
+                            fecha.tarjetas_roja_equipo2=0;
+                            fecha.observacion_equipo2="No tiene observaciones."
+                    
+                            fecha.save((err,fechaGuardada) => {
+                                if(err){
+                                    console.log(err);
+                                    res.status(500).send({mensaje: "Error en el servidor"});
+                                }else{ 
+                                    if (!fechaGuardada) {
+                                       throw err;
+                                    }                                                                   
+                                }
+                            });
+                        }, this);                   
+                        
+                    }
+                
+                if(params.segunda_vuelta)
+                {        
+                    for(i in fechasInvertidas){
+                        // Por fechas 
+                         
+                        console.log(fechasInvertidas[i]);        
+                        fechasInvertidas[i].forEach(function(f) {
+                            var fecha = new Fecha();
+                            fecha.n_fecha=i;
+                            fecha.estado_fecha=false;
+                            fecha.id_categoria=params.id_categoria; 
+                            if(f.e1=="Descanso"){
+                                fecha.id_equipo1=null;
+                            }else{
+                                fecha.id_equipo1=f.e1;
+                            }
+                            
+                            if(f.e2=="Descanso"){
+                                fecha.id_equipo2=null;
+                            }else{
+                                fecha.id_equipo2=f.e2;
+                            }        
+                            
+                            fecha.goles_equipo1=0;
+                            fecha.tarjetas_amarilla_equipo1=0;
+                            fecha.tarjetas_roja_equipo1=0;
+                            fecha.observacion_equipo1="No tiene observaciones."
+                            fecha.goles_equipo2=0;
+                            fecha.tarjetas_amarilla_equipo2=0;
+                            fecha.tarjetas_roja_equipo2=0;
+                            fecha.observacion_equipo2="No tiene observaciones."
+                    
+                            fecha.save((err,fechaGuardada) => {
+                                if(err){
+                                    console.log(err);
+                                    res.status(500).send({mensaje: "Error en el servidor"});
+                                }else{ 
+                                    if (!fechaGuardada) {
+                                       throw err;
+                                    }                                                                   
+                                }
+                            });
+                        }, this);                   
+                        
+                    }   
                 }
-            });
-        }, this);                   
-        
-    }    
-}catch(e){
-    res.status(404).send({mensaje: 'Error al crear una fecha.'});
-}finally{
-    res.status(200).send({fechas:fechas});
-}
+                 
+            }catch(e){
+                res.status(404).send({mensaje: 'Error al crear una fecha.'});
+            }finally{
+                res.status(200).send({fechas:fechas});
+            }
+        }else{
+            try{    
+                var i=0;
+                
+                    for(i in fechas){
+                        // Por fechas 
+                         
+                        console.log(fechas[i]);        
+                        fechas[i].forEach(function(f) {
+                            var fecha = new Fecha();
+                            fecha.n_fecha=i;
+                            fecha.estado_fecha=false;
+                            fecha.id_categoria=params.id_categoria; 
+                            if(f.e1=="Descanso"){
+                                fecha.id_equipo1=null;
+                            }else{
+                                fecha.id_equipo1=f.e1;
+                            }
+                            
+                            if(f.e2=="Descanso"){
+                                fecha.id_equipo2=null;
+                            }else{
+                                fecha.id_equipo2=f.e2;
+                            }        
+                            
+                            fecha.goles_equipo1=0;
+                            fecha.tarjetas_amarilla_equipo1=0;
+                            fecha.tarjetas_roja_equipo1=0;
+                            fecha.observacion_equipo1="No tiene observaciones."
+                            fecha.goles_equipo2=0;
+                            fecha.tarjetas_amarilla_equipo2=0;
+                            fecha.tarjetas_roja_equipo2=0;
+                            fecha.observacion_equipo2="No tiene observaciones."
+                    
+                            fecha.save((err,fechaGuardada) => {
+                                if(err){
+                                    console.log(err);
+                                    res.status(500).send({mensaje: "Error en el servidor"});
+                                }else{ 
+                                    if (!fechaGuardada) {
+                                       throw err;
+                                    }                                                                   
+                                }
+                            });
+                        }, this);                   
+                        
+                    }
+                
+                if(params.segunda_vuelta)
+                {        
+                    for(i in fechasInvertidas){
+                        // Por fechas 
+                         
+                        console.log(fechasInvertidas[i]);        
+                        fechasInvertidas[i].forEach(function(f) {
+                            var fecha = new Fecha();
+                            fecha.n_fecha=i;
+                            fecha.estado_fecha=false;
+                            fecha.id_categoria=params.id_categoria; 
+                            if(f.e1=="Descanso"){
+                                fecha.id_equipo1=null;
+                            }else{
+                                fecha.id_equipo1=f.e1;
+                            }
+                            
+                            if(f.e2=="Descanso"){
+                                fecha.id_equipo2=null;
+                            }else{
+                                fecha.id_equipo2=f.e2;
+                            }        
+                            
+                            fecha.goles_equipo1=0;
+                            fecha.tarjetas_amarilla_equipo1=0;
+                            fecha.tarjetas_roja_equipo1=0;
+                            fecha.observacion_equipo1="No tiene observaciones."
+                            fecha.goles_equipo2=0;
+                            fecha.tarjetas_amarilla_equipo2=0;
+                            fecha.tarjetas_roja_equipo2=0;
+                            fecha.observacion_equipo2="No tiene observaciones."
+                    
+                            fecha.save((err,fechaGuardada) => {
+                                if(err){
+                                    console.log(err);
+                                    res.status(500).send({mensaje: "Error en el servidor"});
+                                }else{ 
+                                    if (!fechaGuardada) {
+                                       throw err;
+                                    }                                                                   
+                                }
+                            });
+                        }, this);                   
+                        
+                    }   
+                }
+                 
+            }catch(e){
+                res.status(404).send({mensaje: 'Error al crear una fecha.'});
+            }finally{
+                res.status(200).send({fechas:fechas});
+            }
+        }
+    }
+});
 
     
 

@@ -9,7 +9,7 @@ function saveCategoria(req, res) {
     categoria.n_equipos_categoria = params.n_equipos_categoria;
     categoria.observacion_categoria = params.observacion_categoria;
     categoria.id_temporada = params.id_temporada;
-
+    categoria.segunda_vuelta=params.segunda_vuelta;
     categoria.save(function (err, categoraGuardada) {
         if (err) {
             res.status(500).send({ mensaje: "Error en el servidor" });
