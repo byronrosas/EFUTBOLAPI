@@ -117,24 +117,6 @@ function updateEquipoCategoria(req, res) {
     }
     });
     
-    // console.log("Estado de la varible: " + equipoEncontrado);
-    // if (equipoEncontrado == true) {
-    //     console.log("No existe este id asi que lo vamos a agregar");
-    //     Categoria.findByIdAndUpdate(categoriaId, { $push: { codigo_equipo: update } }, function (err, actualizado) {
-    //         if (err) {
-    //             res.status(500).send({ mensaje: "Error en el Servidor" });
-    //         } else {
-    //             if (!actualizado) {
-    //                 res.status(404).send({ mensaje: "No se ha podido Guardar el Equipo en la Categoria" });
-    //             } else {
-    //                 res.status(200).send({ categoria: actualizado });
-    //             }
-    //         }
-    //     });
-    //     equipoEncontrado = false;
-    // }else{
-    //     res.status(200).send({mensaje: "El equipo ya esat guardado"})
-    // }
 }
 
 
@@ -147,7 +129,3 @@ module.exports = {
     updateEquipoCategoria
 }
 
-
-Array.prototype.unique=function(a){
-    return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
-  });
