@@ -11,6 +11,7 @@ var md_auth = require('../midddlewards/autenticated');
 api.post('/guardar', md_auth.ensureAuth , FechaController.saveFecha);
 api.get('/:id',FechaController.getFechaById);
 api.get('/',FechaController.getFechas);
+api.get('/by/categoria/:id_categoria',FechaController.getFechaByIdCategoria);
 api.put('/actualizar/:id',md_auth.ensureAuth, FechaController.updateFecha);
 
 module.exports = api;
