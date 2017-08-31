@@ -13,5 +13,5 @@ var carpeta_destino_imagen = multipart({uploadDir : './public/images/estadios'})
 api.post('/guardar',[ md_auth.ensureAuth,carpeta_destino_imagen],EstadioController.saveEstadio);
 api.get('/:id',EstadioController.getEstadioById);
 api.get('/',EstadioController.getEstadios);
-
+api.get('/imagen/:imageFile',EstadioController.getImagenFile);
 module.exports = api;

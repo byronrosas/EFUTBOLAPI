@@ -131,16 +131,16 @@ function uploadImage(req, res) {
     }
 }
 
-function deleteSancion(req, res) {
-    var sancionId = req.params.id;
-    Sancion.findByIdAndRemove(sancionId, function (err, deleteSancion) {
+function deletePersonal(req, res) {
+    var personalID = req.params.id;
+    Personal.findByIdAndRemove(personalID, function (err, deletePersonal) {
         if (err) {
             res.status(500).send({ message: "Error al eliminar la sanción." });
         } else {
-            if (!deleteSancion) {
-                res.status(404).send({ message: "La sanción no ha  podido ser eliminado." });
+            if (!deletePersonal) {
+                res.status(404).send({ message: "La Persona no ha  podido ser eliminado." });
             } else {
-                res.status(200).send({deleteSancion});
+                res.status(200).send({deletePersonal});
             }
         }
     });
@@ -150,5 +150,6 @@ module.exports = {
     savePersonal,
     uploadImage,
     getImagenFile,
-    updatePersonal
+    updatePersonal,
+    deletePersonal
 }
