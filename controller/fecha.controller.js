@@ -123,10 +123,26 @@ function getFechas(req,res){
 function updateFecha(req,res){
     console.log("Updating Fecha...");
     var fechaId = req.params.id;
-    var update = req.body;
+    var update=req.body;
+    // var update ={
+    //     fecha:req.body.fecha,
+    //     hora:req.body.hora,
+    //     id_estadio:req.body.id_estadio,
+    //     goles_equipo1:req.body.goles_equipo1,
+    //     tarjetas_amarilla_equipo1:req.body.tarjetas_amarilla_equipo1,
+    //     tarjetas_roja_equipo1:req.body.tarjetas_roja_equipo1,
+    //     codigo_sancion_equipo1:req.body.codigo_sancion_equipo1,
+    //     observacion_equipo1:req.body.observacion_equipo1,
+    //     goles_equipo2:req.body.goles_equipo2,
+    //     tarjetas_amarilla_equipo2:req.body.tarjetas_amarilla_equipo2,
+    //     tarjetas_roja_equipo2:req.body.tarjetas_roja_equipo2,
+    //     codigo_sancion_equipo2:req.body.codigo_sancion_equipo2,
+    //     observacion_equipo2:req.body.observacion_equipo2
+    // };
 
     Fecha.findByIdAndUpdate(fechaId, update, function (err, fechaActualizada) {
         if (err) {
+            console.log(err);
             res.status(500).send({ mensaje: "Error del servidor" });
         } else {
             if (!fechaActualizada) {
@@ -136,6 +152,22 @@ function updateFecha(req,res){
             }
         }
     })
+}
+
+function getFechaByIdCategoria(req,res){
+    var idCategoria=req.params.id_categoria;
+    Fecha.find({id_categoria:idCategoria},(err,fechasEncontradas)=>{
+        if(err){
+            res.status(500).send({ mensaje: "Error del servidor" });
+        }else{
+            if(!fechasEncontradas || fechasEncontradas.length==0)
+            {
+                res.status(404).send({ mensaje: "No se encontraron fechas para esta categoría." });
+            }else{
+                res.status(200).send({ fechasEncontradas })
+            }
+        }
+    });
 }
 
 function generarMatrizFechas(n,equiposId){
@@ -206,5 +238,7 @@ module.exports = {
     saveFecha,
     getFechaById,
     getFechas,
-    updateFecha
+    updateFecha,
+    getFechaByIdCategoria
+
 }
