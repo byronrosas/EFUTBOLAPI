@@ -1,0 +1,21 @@
+'use strict'
+
+var express = require('express');
+var PersonalController = require('../controller/personal.controller');
+//me permite hacver los metodos get,post
+var api = express.Router();
+
+var md_auth = require('../midddlewards/autenticated');
+
+var multipart = require('connect-multiparty');
+var carpeta_destino_imagen = multipart({uploadDir : './public/images/foto_personal'});
+
+
+api.post('/guardar',[ md_auth.ensureAuth,carpeta_destino_imagen],PersonalController.savePersonal);
+//api.get('/obtenerEquipo/:id',EquipoController.getEquipo);
+//api.get('/listarCategoria/:categoria_perteneciente',EquipoController.getEquiposCategoria);
+//api.put('/actualizar/:id',md_auth.ensureAuth,EquipoController.updateEquipo);
+//api.post('/cargarImagen/:id',[md_auth.ensureAuth,md_upload],EquipoController.uploadImage);
+//api.get('/imagen/:imageFile',EquipoController.getImagenFile);
+
+module.exports=api;
