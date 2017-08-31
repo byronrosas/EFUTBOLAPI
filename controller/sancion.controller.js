@@ -1,0 +1,105 @@
+'use strict'
+
+var path = require('path');
+var fs = require('fs');
+var Sancion = require('../models/sancion.model');
+
+
+function saveSancion(req,res){
+    console.log("Saving Sanción...");
+    var sancion = new Sancion();
+    var params=req.body;
+
+    sancion.nombre_sancion = params.nombre_sancion;
+    sancion.estado_sancion = params.estado_sancion;
+    sancion.pts_sancion = params.pts_sancion;
+    sancion.observacion_sancion = params.observacion_sancion;
+
+    sancion.save((err,sancionGuardada) => {
+        if(err){
+            res.status(500).send({mensaje: "Error en el servidor"});
+        }else{
+            if (!sancionGuardada) {
+                res.status(404).send({mensaje: 'Error al crear una Sanción.'});
+            }else{
+                res.status(200).send({sancion: sancionGuardada});
+            }
+        }
+    });
+
+}
+
+
+function getSancionById(req,res){
+    console.log("Getting by id Sancion...");
+    var sancionId = req.params.id;
+    Sancion.findById(sancionId).exec((err, sancionSelecionada) => {
+        if (err) {
+            res.status(500).send({ mensaje: "Error en el servidor" });
+        } else {
+            if (!sancionSelecionada) {
+                res.status(404).send({ mensaje: "La sanción no se puede encontrar" });
+            } else {
+                res.status(200).send({sancionSelecionada });
+            }
+        }
+    });
+    
+}
+
+function getSanciones(req,res){
+    console.log("Getting  Sancion...");
+    Sancion.find({},(err,sanciones)=>{
+        if(err){
+            res.status(500).send({ mensaje: "Error en el servidor" });
+        }else{
+            if(!sanciones){
+                res.status(404).send({ mensaje: "No existen sanciones creadas" });
+            }else{
+                res.status(200).send(sanciones);
+            }
+        }
+    });
+    
+}
+
+function updateSancion(req,res){
+    console.log("Updating Sancion...");
+    var sancionId = req.params.id;
+    var update = req.body;
+
+    Sancion.findByIdAndUpdate(sancionId, update, function (err, sancionActualizada) {
+        if (err) {
+            res.status(500).send({ mensaje: "Error del servidor" });
+        } else {
+            if (!sancionActualizada) {
+                res.status(404).send({ mensaje: "Error no se puede actualizar la sanción seleccionada" });
+            } else {
+                res.status(200).send({ sancionActualizada })
+            }
+        }
+    })
+}
+
+function deleteSancion(req, res) {
+    var sancionId = req.params.id;
+    Sancion.findByIdAndRemove(sancionId, function (err, deleteSancion) {
+        if (err) {
+            res.status(500).send({ message: "Error al eliminar la sanción." });
+        } else {
+            if (!deleteSancion) {
+                res.status(404).send({ message: "La sanción no ha  podido ser eliminado." });
+            } else {
+                res.status(200).send({deleteSancion});
+            }
+        }
+    });
+}
+
+module.exports = {
+    saveSancion,
+    getSancionById,
+    getSanciones,
+    updateSancion,
+    deleteSancion
+}
