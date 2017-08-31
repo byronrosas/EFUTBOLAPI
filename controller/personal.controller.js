@@ -147,5 +147,8 @@ function deleteSancion(req, res) {
 }
 
 module.exports = {
-    savePersonal
+    savePersonal,
+    uploadImage,
+    getImagenFile,
+    updatePersonal
 }
