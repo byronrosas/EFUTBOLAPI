@@ -17,5 +17,6 @@ api.post('/guardar',[ md_auth.ensureAuth,carpeta_destino_imagen],PersonalControl
 api.put('/actualizar/:id',md_auth.ensureAuth,PersonalController.updatePersonal);
 //api.post('/cargarImagen/:id',[md_auth.ensureAuth,md_upload],EquipoController.uploadImage);
 api.get('/imagen/:imageFile',PersonalController.getImagenFile);
+api.delete('/eliminar',md_auth.ensureAuth,PersonalController.deletePersonal);
 
 module.exports=api;
