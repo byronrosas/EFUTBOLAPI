@@ -11,5 +11,8 @@ api.get('/',CategoriaController.getCategorias);
 api.get('/:id',CategoriaController.getCategoriaById);
 api.put('/actualizar/:id',md_auth.ensureAuth,CategoriaController.updateCategoria);
 api.put('/agregarEquipo/:id',md_auth.ensureAuth,CategoriaController.updateEquipoCategoria);
+
+api.put('/quitarEquipo/:id',CategoriaController.quitarEquipoCategoria);
+
 module.exports = api;
 

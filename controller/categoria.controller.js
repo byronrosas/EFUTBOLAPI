@@ -119,6 +119,43 @@ function updateEquipoCategoria(req, res) {
     
 }
 
+function quitarEquipoCategoria (req,res){
+    var ids_equipos;
+    var categoriaId = req.params.id;
+    var id_equipo = req.body.codigo_equipo;
+    Categoria.findById(categoriaId,function(err,categoria){
+        if(err){
+            res.status(500).send({mensaje: "Error en el servidor"})
+        }else{
+            if(!categoria){
+                res.status(404).send({mensaje: "No se ha encontrado la categoria"})
+            }else{
+                for (var index = 0; index < categoria.codigo_equipo.length; index++) {
+                    if(categoria.codigo_equipo[index] == id_equipo){
+                        categoria.codigo_equipo.splice(index,1);
+                    }
+                }
+                ids_equipos=categoria.codigo_equipo;
+                console.log(categoria.codigo_equipo);
+                //res.status(200).send({data: ids_equipos});
+                Categoria.findByIdAndUpdate(categoriaId,{$set:{codigo_equipo:categoria.codigo_equipo}},function(err,actualizadoCategoria){
+                    if(err){
+                        res.status(500).send({mensaje:"Error en el servidor"});
+                    }else{
+                        if(!actualizadoCategoria){
+                            res.status(404).send({mensaje : "Error al guardar la Categoria en codigo_equipos"});
+                        }else{
+                            res.status(200).send({categoria: actualizadoCategoria });
+                        }
+                    }
+                });
+            }
+        }
+        
+    });
+
+}
+
 
 
 module.exports = {
@@ -126,6 +163,7 @@ module.exports = {
     getCategorias,
     getCategoriaById,
     updateCategoria,
-    updateEquipoCategoria
+    updateEquipoCategoria,
+    quitarEquipoCategoria
 }
 
