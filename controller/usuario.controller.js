@@ -59,7 +59,7 @@ function loginUser(req, res){
 			res.status(500).send({mensaje: 'Error en la petición'});
 		}else{
 			if(!user){
-				res.status(404).send({user: 'El usuario no existe'});
+				res.status(404).send({mensaje: 'El usuario no existe'});
 			}else{
 				console.log(user);
 				// Comprobar la contraseña
