@@ -20,7 +20,7 @@ function getNoticias(req, res){
 		}else{
 			if(!noticias){
 				res.status(404).send({mensaje: 'No hay noticias !!'});
-			}else{
+			}else{				
                 return res.status(200).send({
 					total_items: total,
 					mensaje:noticias
@@ -35,21 +35,57 @@ function saveNoticia(req, res){
 	var params = req.body;
 	noticia.titulo = params.titulo;
 	noticia.descripcion = params.descripcion;
-	noticia.observacion = params.observacion;
-	noticia.image = 'null';
+	noticia.observacion = params.observacion;	
 	noticia.usuario = params.usuario;
 
-	noticia.save((err, noticiaGuardada) => {
-		if(err){
-			res.status(500).send({mensaje: 'Error en el servidor'});
-		}else{
-			if(!noticiaGuardada){
-				res.status(404).send({mensaje: 'No se ha guardado la noticia'});
-			}else{
-				res.status(200).send({mensaje: noticiaGuardada});
+	if (req.files) {
+		
+				var file_path = req.files.image.path;
+				var file_split = file_path.split('\\');
+				var file_name = file_split[3];
+				//console.log(file_split);
+				var ext_split = file_name.split('\.');
+				var file_ext = ext_split[1];
+				//console.log(ext_split);
+				if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {
+		
+					noticia.image = file_name;
+					//console.log(equipo)
+					noticia.save((err, noticiaGuardada) => {
+						if(err){
+							res.status(500).send({mensaje: 'Error en el servidor'});
+						}else{
+							if(!noticiaGuardada){
+								res.status(404).send({mensaje: 'No se ha guardado la noticia'});
+							}else{
+								res.status(200).send({mensaje: noticiaGuardada});
+							}
+						}
+					});		
+				} else {
+					res.status(200).send({
+						mensaje: "Extension del archivo no valido"
+					});
+				}
+			} else {
+				noticia.image = "default";
+				noticia.save((err, noticiaGuardada) => {
+					if(err){
+						res.status(500).send({mensaje: 'Error en el servidor'});
+					}else{
+						if(!noticiaGuardada){
+							res.status(404).send({mensaje: 'No se ha guardado la noticia'});
+						}else{
+							res.status(200).send({mensaje: noticiaGuardada});
+						}
+					}
+				});
+				// res.status(200).send({
+				//     message: "No ha subido Ninguna Imagen"
+				// });
 			}
-		}
-	});
+
+	
 }
 
 function updateNoticia(req, res){
@@ -119,12 +155,13 @@ function uploadImage(req, res){
 
 function getImageFile(req, res){
 	var imageFile = req.params.imageFile;
-	var path_file = './uploads/albums/'+imageFile;
+	var path_file = './public/images/noticias/'+imageFile;	
 	fs.exists(path_file, function(exists){
 		if(exists){
+			console.log(exists);
 			res.sendFile(path.resolve(path_file));
 		}else{
-			res.status(200).send({message: 'No existe la imagen...'});
+			res.status(404).send("No existe imagen.");
 		}
 	});
 }
