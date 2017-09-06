@@ -9,7 +9,9 @@ function saveEquipo(req, res) {
     var equipo = new Equipo();
 
     var params = req.body;
-
+    console.log("Parametros ------------->>>>>>");
+    console.log(params);
+    console.log("Parametros ------------->>>>>>");
     equipo.nombre_equipo = params.nombre_equipo;
     equipo.descripcion_equipo = params.descripcion_equipo;
     equipo.anio_fundacion_equipo = params.anio_fundacion_equipo;
@@ -50,6 +52,8 @@ function saveEquipo(req, res) {
             });
         }
     } else {
+        console.log(equipo);
+        console.log("GUARDADO SIN IMAGEN")
         equipo.escudo_equipo = "default";
         equipo.save((err, equipoGuardado) => {
             if (err) {
@@ -145,12 +149,27 @@ function getEquipo(req, res) {
 
 function getEquiposCategoria(req, res) {
     var categoriaId = req.params.categoria_perteneciente
-    Equipo.find({ id_categoria: categoriaId }).sort('nombre_equiupo').exec((err, equiposEncontrados) => {
+    Equipo.find({ id_categoria: categoriaId }).sort('nombre_equipo').exec((err, equiposEncontrados) => {
         if (err) {
             res.status(500).send({ mensaje: "Error del servidor" });
         } else {
             if (!equiposEncontrados) {
                 res.status(404).send({ mensaje: "No existen equipos en esta Categoria" })
+            } else {
+                res.status(200).send({ equiposEncontrados });
+            }
+        }
+    })
+
+}
+function getEquipos(req, res) {
+
+    Equipo.find({}).sort('nombre_equipo').exec((err, equiposEncontrados) => {
+        if (err) {
+            res.status(500).send({ mensaje: "Error del servidor" });
+        } else {
+            if (!equiposEncontrados) {
+                res.status(404).send({ mensaje: "No existen equipos creados" })
             } else {
                 res.status(200).send({ equiposEncontrados });
             }
@@ -165,5 +184,6 @@ module.exports = {
     getImagenFile,
     uploadImage,
     getEquipo,
-    getEquiposCategoria
+    getEquiposCategoria,
+    getEquipos
 }
