@@ -7,8 +7,10 @@ var api = express.Router();
 
 var md_auth = require('../midddlewards/autenticated');
 
+var multipart = require('connect-multiparty');
+var carpeta_destino_imagen = multipart({uploadDir : './public/images/reglamento'});
 
-api.post('/guardar', md_auth.ensureAuth , TemporadaController.saveTemporada);
+api.post('/guardar',[ md_auth.ensureAuth,carpeta_destino_imagen], TemporadaController.saveTemporada);
 api.get('/:id',TemporadaController.getTemporadaById);
 api.get('/',TemporadaController.getTemporadas);
 api.put('/actualizar/:id',md_auth.ensureAuth, TemporadaController.updateTemporada);

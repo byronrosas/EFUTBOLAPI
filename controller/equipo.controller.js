@@ -22,7 +22,7 @@ function saveEquipo(req, res) {
     equipo.id_categoria = params.id_categoria;
 
     if (req.files) {
-
+        console.log(req.files);
         var file_path = req.files.escudo_equipo.path;
         var file_split = file_path.split('\\');
         var file_name = file_split[3];
@@ -36,6 +36,7 @@ function saveEquipo(req, res) {
             //console.log(equipo)
             equipo.save((err, equipoGuardado) => {
                 if (err) {
+                    console.log("Error::: ===> "+err);
                     res.status(500).send({ mensaje: "Error en el servidor" });
                 } else {
                     if (!equipoGuardado) {
