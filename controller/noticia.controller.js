@@ -37,8 +37,8 @@ function saveNoticia(req, res){
 	noticia.descripcion = params.descripcion;
 	noticia.observacion = params.observacion;	
 	noticia.usuario = params.usuario;
-
-	if (req.files) {
+console.log(req.files.image);
+	if (req.files && req.files.image!=undefined) {
 		
 				var file_path = req.files.image.path;
 				var file_split = file_path.split('\\');
@@ -69,7 +69,7 @@ function saveNoticia(req, res){
 					});
 				}
 			} else {
-				noticia.image = "default";
+				// noticia.image = "default";
 				noticia.save((err, noticiaGuardada) => {
 					if(err){
 						res.status(500).send({mensaje: 'Error en el servidor'});
@@ -92,18 +92,68 @@ function saveNoticia(req, res){
 function updateNoticia(req, res){
 	var noticiaId = req.params.id;
 	var update = req.body;
-
-	Noticia.findByIdAndUpdate(noticiaId, update, (err, noticiaUpdated) => {
-		if(err){
-			res.status(500).send({mensaje: 'Error en el servidor'});
-		}else{
-			if(!noticiaUpdated){
-				res.status(404).send({mensaje: 'No se ha actualizado la noticia'});
-			}else{
-				res.status(200).send({mensaje: noticiaUpdated});
+	console.log(req.files);
+	if (req.files && req.files.image!=undefined) {
+		
+				var file_path = req.files.image.path;
+				var file_split = file_path.split('\\');
+				var file_name = file_split[3];
+				//console.log(file_split);
+				var ext_split = file_name.split('\.');
+				var file_ext = ext_split[1];
+				//console.log(ext_split);
+				if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {										
+					//console.log(equipo)					
+					update.image=file_name;
+					Noticia.findByIdAndUpdate(noticiaId, update, (err, noticiaUpdated) => {
+						if(err){
+							res.status(500).send({mensaje: 'Error en el servidor'});
+						}else{
+							if(!noticiaUpdated){
+								res.status(404).send({mensaje: 'No se ha actualizado la noticia'});
+							}else{
+								console.log(noticiaUpdated);
+								//BORRA ARCHIVO ANTERIOR
+								if(noticiaUpdated.image!='default.jpg'){
+									var path_file = './public/images/noticias/'+noticiaUpdated.image;									
+									fs.exists(path_file, function(exists){
+										if(exists){
+											console.log(exists);
+											fs.unlink(path_file,(err)=>{
+												if(err){
+													console.log("El archivo no pudo ser eliminado");
+												}else{
+													console.log("Archivo eliminado...");
+												}											
+											});
+										}else{
+											console.log("No hay imagen.");
+										}
+									});
+								}								
+								res.status(200).send({mensaje: noticiaUpdated});
+							}
+						}
+					});	
+				} else {
+					res.status(200).send({
+						mensaje: "Extension del archivo no valido"
+					});
+				}
+			} else {
+				
+				Noticia.findByIdAndUpdate(noticiaId, update, (err, noticiaUpdated) => {
+					if(err){
+						res.status(500).send({mensaje: 'Error en el servidor'});
+					}else{
+						if(!noticiaUpdated){
+							res.status(404).send({mensaje: 'No se ha actualizado la noticia'});
+						}else{							
+							res.status(200).send({mensaje: noticiaUpdated});
+						}
+					}
+				});
 			}
-		}
-	});
 }
 
 function deleteNoticia(req, res){
@@ -116,6 +166,24 @@ function deleteNoticia(req, res){
 			if(!noticiaEliminada){
 				res.status(404).send({mensaje: 'La noticia no ha sido eliminado'});
 			}else{
+				//BORRA ARCHIVO ANTERIOR
+				if(noticiaEliminada.image!='default.jpg'){
+					var path_file = './public/images/noticias/'+noticiaEliminada.image;									
+					fs.exists(path_file, function(exists){
+						if(exists){
+							console.log(exists);
+							fs.unlink(path_file,(err)=>{
+								if(err){
+									console.log("El archivo no pudo ser eliminado");
+								}else{
+									console.log("Archivo eliminado...");
+								}											
+							});
+						}else{
+							console.log("No hay imagen.");
+						}
+					});
+				}				
                 res.status(200).send({mensaje: noticiaEliminada});
             }
         }
