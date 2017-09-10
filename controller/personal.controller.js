@@ -20,7 +20,7 @@ function savePersonal(req,res){
     personal.observacion_personal = params.observacion_personal ;
 
     if (req.files && req.files.url_foto_personal != undefined) {
-        
+                console.log("Con Foto");
                 var file_path = req.files.url_foto_personal.path;
                 var file_split = file_path.split('\\');
                 var file_name = file_split[3];
@@ -50,6 +50,7 @@ function savePersonal(req,res){
                     });
                 }
             } else {
+                console.log("Sin Foto");
                 //personal.url_foto_personal = "default_foto";
                 personal.save((err, personaGuardada) => {
                     if (err) {
