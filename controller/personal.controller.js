@@ -18,7 +18,7 @@ function savePersonal(req,res){
     personal.cedula_personal = params.cedula_personal ;
     personal.observacion_personal = params.observacion_personal ;
 
-    if (req.files) {
+    if (req.files && req.files.image!=undefined) {
         
                 var file_path = req.files.url_foto_personal.path;
                 var file_split = file_path.split('\\');
@@ -38,7 +38,7 @@ function savePersonal(req,res){
                             if (!personaGuardada) {
                                 res.status(404).send({ mensaje: "Error al guardar el Personal" });
                             } else {
-                                res.status(200).send({ persona: personaGuardada });
+                                res.status(200).send({ personal: personaGuardada });
                             }
                         }
                     });
@@ -57,6 +57,7 @@ function savePersonal(req,res){
                         if (!personaGuardada) {
                             res.status(404).send({ mensaje: "Error al guardar el Personal" });
                         } else {
+                            console.log( personaGuardada);
                             res.status(200).send({ personal: personaGuardada });
                         }
                     }
