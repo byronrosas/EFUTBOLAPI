@@ -9,7 +9,8 @@ function savePersonal(req,res){
     
     var personal = new Personal();
     var params=req.body;
-
+    console.log("Aqui esta el contenido ----------->");
+    console.log(params)
 
     personal.nombre_personal = params.nombre_personal ;
     personal.apellido_personal = params.apellido_personal ;
@@ -18,8 +19,8 @@ function savePersonal(req,res){
     personal.cedula_personal = params.cedula_personal ;
     personal.observacion_personal = params.observacion_personal ;
 
-    if (req.files && req.files.image!=undefined) {
-        
+    if (req.files && req.files.url_foto_personal != undefined) {
+                console.log("Con Foto");
                 var file_path = req.files.url_foto_personal.path;
                 var file_split = file_path.split('\\');
                 var file_name = file_split[3];
@@ -49,9 +50,11 @@ function savePersonal(req,res){
                     });
                 }
             } else {
-                personal.url_foto_personal = "default_foto";
+                console.log("Sin Foto");
+                //personal.url_foto_personal = "default_foto";
                 personal.save((err, personaGuardada) => {
                     if (err) {
+                        console.log("el Error = "+err);
                         res.status(500).send({ mensaje: "Error en el servidor" });
                     } else {
                         if (!personaGuardada) {
