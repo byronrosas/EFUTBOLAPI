@@ -1,6 +1,7 @@
 'use strict'
 
 var Categoria = require('../models/categoria.model');
+var mongoose = require('mongoose');
 
 function saveCategoria(req, res) {
     var categoria = new Categoria();
@@ -38,6 +39,20 @@ function getCategorias(req, res) {
     });
 }
 
+function getTodasCategorias(req,res){
+    var find = Categoria.find({})
+    find.exec(function (err, categorias) {
+        if (err) {
+            res.status(500).send({ mensaje: "Error en el servidor" });
+        } else {
+            if (!categorias) {
+                res.status(404).send({ mensaje: "No existen categorias creadas" });
+            } else {
+                res.status(200).send(categorias);
+            }
+        }
+    });
+}
 function getCategoriaById(req, res) {
     var categoriaId = req.params.id;
     Categoria.findById(categoriaId).exec(function (err, categorias) {
@@ -164,6 +179,7 @@ module.exports = {
     getCategoriaById,
     updateCategoria,
     updateEquipoCategoria,
-    quitarEquipoCategoria
+    quitarEquipoCategoria,
+    getTodasCategorias
 }
 
