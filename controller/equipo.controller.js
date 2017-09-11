@@ -36,6 +36,7 @@ function saveEquipo(req, res) {
             //console.log(equipo)
             equipo.save((err, equipoGuardado) => {
                 if (err) {
+                    console.log("Error::: ===> "+err);
                     res.status(500).send({ mensaje: "Error en el servidor" });
                 } else {
                     if (!equipoGuardado) {
@@ -236,6 +237,55 @@ function getEquipos(req, res) {
 
 }
 
+function updatePersonalEquipo(req, res) {
+    
+        var equipoId = req.params.idEquipo;
+        var update = req.body.personal_equipo;
+    
+        Equipo.findById(equipoId, (err, actualizado) => {
+            console.log("ARREGLO = " + actualizado.personal_equipo)
+            if(actualizado.personal_equipo.length==0){
+                Equipo.findByIdAndUpdate(equipoId, { $push: { personal_equipo: update } }, function (err, actualizado) {
+                    if (err) {
+                        res.status(500).send({ mensaje: "Error en el Servidor" });
+                    } else {
+                        if (!actualizado) {
+                            res.status(404).send({ mensaje: "No se ha podido Guardar el Jugador en el Equipo Actual" });
+                        } else {
+                            res.status(200).send({ equipo: actualizado });
+                        }
+                    }
+                });            
+            }else{
+    
+            for (var index = 0; index < actualizado.personal_equipo.length; index++) {
+                console.log(index);
+                if (actualizado.personal_equipo[index] == update) {
+                    console.log("Ya existe este id");
+                    res.status(200).send({mensaje : "Ya existe Un Jugador con este id guardado con este id: "+update});               
+                    break;
+                }else{
+                    console.log("No hay coincidencias");
+                    if(index==actualizado.personal_equipo.length-1){
+                        Equipo.findByIdAndUpdate(equipoId, { $push: { personal_equipo: update } }, function (err, actualizado) {
+                                    if (err) {
+                                        res.status(500).send({ mensaje: "Error en el Servidor" });
+                                    } else {
+                                        if (!actualizado) {
+                                            res.status(404).send({ mensaje: "No se ha podido Guardar el Equipo en la Categoria" });
+                                        } else {
+                                            res.status(200).send({ equipo: actualizado });
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
+        }
+        });
+        
+    }
+
 module.exports = {
     saveEquipo,
     updateEquipo,
@@ -243,5 +293,6 @@ module.exports = {
     uploadImage,
     getEquipo,
     getEquiposCategoria,
-    getEquipos
+    getEquipos,
+    updatePersonalEquipo
 }

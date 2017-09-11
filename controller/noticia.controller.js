@@ -53,6 +53,7 @@ console.log(req.files.image);
 					//console.log(equipo)
 					noticia.save((err, noticiaGuardada) => {
 						if(err){
+							console.log("Error::: ===> "+err);
 							res.status(500).send({mensaje: 'Error en el servidor'});
 						}else{
 							if(!noticiaGuardada){
