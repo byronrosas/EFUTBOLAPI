@@ -12,7 +12,7 @@ var EquipoSchema = Schema({
     observacion_equipo:String,
     personal_equipo:[{ type : Schema.ObjectId, ref: 'Personal' }],
     estado_equipo:{type:Boolean,default:true},
-    logros_equipo:[String]
+    logros_equipo:[JSON]
 });
 
 module.exports = mongoose.model('Equipo',EquipoSchema);

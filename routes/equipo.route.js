@@ -21,7 +21,7 @@ api.post('/guardar',[ md_auth.ensureAuth,carpeta_destino_imagen],EquipoControlle
 api.get('/obtenerEquipo/:id',EquipoController.getEquipo);
 api.get('/listarCategoria/:categoria_perteneciente',EquipoController.getEquiposCategoria);
 api.get('/listartodos',EquipoController.getEquipos);
-api.put('/actualizar/:id',md_auth.ensureAuth,EquipoController.updateEquipo);
+api.put('/actualizar/:id',[ md_auth.ensureAuth,carpeta_destino_imagen],EquipoController.updateEquipo);
 //api.post('/cargarImagen/:id',[md_auth.ensureAuth,md_upload],EquipoController.uploadImage);
 api.get('/imagen/:imageFile',EquipoController.getImagenFile);
 

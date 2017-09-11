@@ -19,9 +19,9 @@ function saveEquipo(req, res) {
     equipo.color_principal_equipo = params.color_principal_equipo;
     equipo.color_secundario_equipo = params.color_secundario_equipo;
     equipo.observacion_equipo = params.observacion_equipo;
-    equipo.id_categoria = params.id_categoria;
+    // equipo.id_categoria = params.id_categoria;
 
-    if (req.files) {
+    if (req.files && req.files.image!=undefined) {
 
         var file_path = req.files.escudo_equipo.path;
         var file_split = file_path.split('\\');
@@ -53,8 +53,7 @@ function saveEquipo(req, res) {
         }
     } else {
         console.log(equipo);
-        console.log("GUARDADO SIN IMAGEN")
-        equipo.escudo_equipo = "default";
+        console.log("GUARDADO SIN IMAGEN")        
         equipo.save((err, equipoGuardado) => {
             if (err) {
                 res.status(500).send({ mensaje: "Error en el servidor" });
@@ -73,20 +72,79 @@ function saveEquipo(req, res) {
 }
 function updateEquipo(req, res) {
     var equipoId = req.params.id;
-    var update = req.body;
-
-    Equipo.findByIdAndUpdate(equipoId, update, function (err, equipoActualizado) {
-        if (err) {
-            res.status(500).send({ mensaje: "Error del servidor" });
-        } else {
-            if (!equipoActualizado) {
-                res.status(404).send({ mensaje: "Error no se puede actualizar el equipo" });
-            } else {
-                res.status(200).send({ equipoActualizado })
+    var update = req.body; 
+    console.log(update);
+    // if(update.personal_equipo==''){
+    //     update.personal_equipo=[];
+    // }else{
+    //     update.personal_equipo=update.personal_equipo.split(',');        
+    // } 
+    update.personal_equipo=JSON.parse(update.personal_equipo);        
+    update.logros_equipo=JSON.parse(update.logros_equipo);
+    console.log(update);   
+    if (req.files && req.files.escudo_equipo!=undefined) {                
+				var file_path = req.files.escudo_equipo.path;
+				var file_split = file_path.split('\\');
+				var file_name = file_split[3];
+				//console.log(file_split);
+				var ext_split = file_name.split('\.');
+				var file_ext = ext_split[1];
+				//console.log(ext_split);
+				if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {										
+					//console.log(equipo)					
+                    update.escudo_equipo=file_name;                    
+                        
+					Equipo.findByIdAndUpdate(equipoId, update, function (err, equipoActualizado) {
+						if(err){
+                            console.log(err);
+                            res.status(500).send({mensaje: 'Error en el servidor'});                            
+						}else{
+							if(!equipoActualizado){                            
+								res.status(404).send({mensaje: 'No se ha actualizado la noticia'});
+							}else{
+								console.log(equipoActualizado);
+								//BORRA ARCHIVO ANTERIOR
+								if(equipoActualizado.escudo_equipo!='default.png'){
+									var path_file = './public/images/escudos/'+equipoActualizado.escudo_equipo;									
+									fs.exists(path_file, function(exists){
+										if(exists){
+											console.log(exists);
+											fs.unlink(path_file,(err)=>{
+												if(err){
+													console.log("El archivo no pudo ser eliminado");
+												}else{
+													console.log("Archivo eliminado...");
+												}											
+											});
+										}else{
+											console.log("No hay imagen.");
+										}
+									});
+								}								
+								res.status(200).send({mensaje: equipoActualizado});
+							}
+						}
+					});	
+				} else {
+					res.status(200).send({
+						mensaje: "Extension del archivo no valido"
+					});
+				}
+			} else {
+                console.log(update);				
+                Equipo.findByIdAndUpdate(equipoId, update, function (err, equipoActualizado) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500).send({ mensaje: "Error del servidor" });
+                    } else {
+                        if (!equipoActualizado) {
+                            res.status(404).send({ mensaje: "Error no se puede actualizar el equipo" });
+                        } else {
+                            res.status(200).send({ equipoActualizado })
+                        }
+                    }
+                })
             }
-        }
-    })
-
 }
 
 function getImagenFile(req, res) {

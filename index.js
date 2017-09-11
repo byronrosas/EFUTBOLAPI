@@ -12,7 +12,8 @@ mongoose.connect('mongodb://efutbol_db:123Root@ds111204.mlab.com:11204/efutbol_d
     }else{
         console.log("La Base de Datos Esta Corriendo Exitosamente");
         app.listen(port,function(){
-            console.log("Servidor de E-futbol esta corriendo en el pueto: localhost:"+port);
+            console.log("Servidor de E-futbol esta corriendo en el pueto :) : localhost:"+port);
         })
     }
 });
+
