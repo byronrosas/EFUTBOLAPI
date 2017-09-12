@@ -39,7 +39,7 @@ function savePersonal(req,res){
                             if (!personaGuardada) {
                                 res.status(404).send({ mensaje: "Error al guardar el Personal" });
                             } else {
-                                res.status(200).send({ persona: personaGuardada });
+                                res.status(200).send({ personal: personaGuardada });
                             }
                         }
                     });
@@ -60,6 +60,7 @@ function savePersonal(req,res){
                         if (!personaGuardada) {
                             res.status(404).send({ mensaje: "Error al guardar el Personal" });
                         } else {
+                            console.log( personaGuardada);
                             res.status(200).send({ personal: personaGuardada });
                         }
                     }
