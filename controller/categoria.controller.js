@@ -24,14 +24,15 @@ function saveCategoria(req, res) {
 }
 
 function getCategorias(req, res) {
-    var find = Categoria.find({})
-    find.populate({ path: 'codigo_equipo' }).exec(function (err, categorias) {
+    
+    Categoria.find().exec(function (err, categorias) {
         if (err) {
             res.status(500).send({ mensaje: "Error en el servidor" });
         } else {
             if (!categorias) {
                 res.status(404).send({ mensaje: "No existen categorias creadas" });
             } else {
+                console.log(categorias);
                 res.status(200).send(categorias);
             }
         }
