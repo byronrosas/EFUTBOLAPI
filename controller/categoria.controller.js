@@ -1,6 +1,7 @@
 'use strict'
 
 var Categoria = require('../models/categoria.model');
+var mongoose = require('mongoose');
 
 function saveCategoria(req, res) {
     var categoria = new Categoria();
@@ -24,8 +25,24 @@ function saveCategoria(req, res) {
 }
 
 function getCategorias(req, res) {
+    
+    Categoria.find().exec(function (err, categorias) {
+        if (err) {
+            res.status(500).send({ mensaje: "Error en el servidor" });
+        } else {
+            if (!categorias) {
+                res.status(404).send({ mensaje: "No existen categorias creadas" });
+            } else {
+                console.log(categorias);
+                res.status(200).send(categorias);
+            }
+        }
+    });
+}
+
+function getTodasCategorias(req,res){
     var find = Categoria.find({})
-    find.populate({ path: 'codigo_equipo' }).exec(function (err, categorias) {
+    find.exec(function (err, categorias) {
         if (err) {
             res.status(500).send({ mensaje: "Error en el servidor" });
         } else {
@@ -37,7 +54,6 @@ function getCategorias(req, res) {
         }
     });
 }
-
 function getCategoriaById(req, res) {
     var categoriaId = req.params.id;
     Categoria.findById(categoriaId).exec(function (err, categorias) {
@@ -164,6 +180,7 @@ module.exports = {
     getCategoriaById,
     updateCategoria,
     updateEquipoCategoria,
-    quitarEquipoCategoria
+    quitarEquipoCategoria,
+    getTodasCategorias
 }
 

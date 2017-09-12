@@ -12,6 +12,7 @@ function saveEquipo(req, res) {
     console.log("Parametros ------------->>>>>>");
     console.log(params);
     console.log("Parametros ------------->>>>>>");
+    
     equipo.nombre_equipo = params.nombre_equipo;
     equipo.descripcion_equipo = params.descripcion_equipo;
     equipo.anio_fundacion_equipo = params.anio_fundacion_equipo;
@@ -21,7 +22,10 @@ function saveEquipo(req, res) {
     equipo.observacion_equipo = params.observacion_equipo;
     // equipo.id_categoria = params.id_categoria;
 
-    if (req.files && req.files.image!=undefined) {
+            // equipo.personal_equipo=JSON.parse(params.personal_equipo);        
+            // equipo.logros_equipo=JSON.parse(params.logros_equipo);
+      console.log(equipo);  
+    if (req.files && req.files.escudo_equipo!=undefined) {
 
         var file_path = req.files.escudo_equipo.path;
         var file_split = file_path.split('\\');
@@ -42,7 +46,7 @@ function saveEquipo(req, res) {
                     if (!equipoGuardado) {
                         res.status(404).send({ mensaje: "Error al guardar el Equipo" });
                     } else {
-                        res.status(200).send({ saveEquipo: equipoGuardado });
+                        res.status(200).send({equipoGuardado});
                     }
                 }
             });
@@ -62,7 +66,7 @@ function saveEquipo(req, res) {
                 if (!equipoGuardado) {
                     res.status(404).send({ mensaje: "Error al guardar el Equipo" });
                 } else {
-                    res.status(200).send({ saveEquipo: equipoGuardado });
+                    res.status(200).send({equipoGuardado});
                 }
             }
         });
@@ -284,6 +288,40 @@ function updatePersonalEquipo(req, res) {
         
     }
 
+    function deleteEquipo(req, res){
+        var equipoId = req.params.id; 
+    
+        Equipo.findByIdAndRemove(equipoId,(err,equipoEliminada)=>{
+            if(err){
+                res.status(500).send({mensaje: 'Error en el servidor'});
+            }else{
+                if(!equipoEliminada){
+                    res.status(404).send({mensaje: 'El equipo no ha sido eliminado'});
+                }else{
+                    //BORRA ARCHIVO ANTERIOR
+                    if(equipoEliminada.escudo_equipo!='default.png'){
+                        var path_file = './public/images/escudos/'+equipoEliminada.escudo_equipo;									
+                        fs.exists(path_file, function(exists){
+                            if(exists){
+                                console.log(exists);
+                                fs.unlink(path_file,(err)=>{
+                                    if(err){
+                                        console.log("El archivo no pudo ser eliminado");
+                                    }else{
+                                        console.log("Archivo eliminado...");
+                                    }											
+                                });
+                            }else{
+                                console.log("No hay imagen.");
+                            }
+                        });
+                    }				
+                    res.status(200).send({mensaje: equipoEliminada});
+                }
+            }
+    
+        });
+    }
 module.exports = {
     saveEquipo,
     updateEquipo,
@@ -292,5 +330,6 @@ module.exports = {
     getEquipo,
     getEquiposCategoria,
     getEquipos,
-    updatePersonalEquipo
+    updatePersonalEquipo,
+    deleteEquipo
 }
