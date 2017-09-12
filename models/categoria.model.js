@@ -6,7 +6,7 @@ var CategoriaSchema = Schema({
     n_equipos_categoria:Number,
     observacion_categoria:String,
     id_temporada: { type: Schema.ObjectId, ref: 'Temporada'},
-    segunda_vuelta:{type:Boolean},
+    segunda_vuelta: Boolean,
     codigo_equipo:[
         {type : Schema.ObjectId , ref: 'Equipo', unique: true} 
     ]
