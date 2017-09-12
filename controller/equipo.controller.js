@@ -223,7 +223,7 @@ function getEquiposCategoria(req, res) {
 }
 function getEquipos(req, res) {
 
-    Equipo.find({}).sort('nombre_equipo').exec((err, equiposEncontrados) => {
+    Equipo.find({}).sort('nombre_equipo').populate({path:'personal_equipo'}).exec((err, equiposEncontrados) => {
         if (err) {
             res.status(500).send({ mensaje: "Error del servidor" });
         } else {
@@ -238,10 +238,8 @@ function getEquipos(req, res) {
 }
 
 function updatePersonalEquipo(req, res) {
-    
         var equipoId = req.params.idEquipo;
         var update = req.body.personal_equipo;
-    
         Equipo.findById(equipoId, (err, actualizado) => {
             console.log("ARREGLO = " + actualizado.personal_equipo)
             if(actualizado.personal_equipo.length==0){

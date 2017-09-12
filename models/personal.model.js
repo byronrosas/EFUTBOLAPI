@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var PersonalShema=new Schema({
+
     nombre_personal:String, //
     apellido_personal:String, //
     rol_personal:String, //
