@@ -10,18 +10,19 @@ var FechaSchema = Schema({
     id_estadio: { type: Schema.ObjectId, ref: 'Estadio'},
     
     id_equipo1: { type: Schema.ObjectId, ref: 'Equipo'},
-    goles_equipo1 : Number,
-    tarjetas_amarilla_equipo1 : Number,
-    tarjetas_roja_equipo1 : Number,
+    goles_equipo1 :[{ type : Schema.ObjectId, ref: 'Personal' }],
+    tarjetas_amarilla_equipo1 : [{ type : Schema.ObjectId, ref: 'Personal' }],
+    tarjetas_roja_equipo1 :[{ type : Schema.ObjectId, ref: 'Personal' }],
     codigo_sancion_equipo1 : {type: Schema.ObjectId, ref:'Sancion'},
     observacion_equipo1: String,
     
     id_equipo2 : { type: Schema.ObjectId, ref: 'Equipo'},
-    goles_equipo2 :Number,
-    tarjetas_amarilla_equipo2 :Number,
-    tarjetas_roja_equipo2 :Number,
+    goles_equipo2 :[{ type : Schema.ObjectId, ref: 'Personal' }],
+    tarjetas_amarilla_equipo2 :[{ type : Schema.ObjectId, ref: 'Personal' }],
+    tarjetas_roja_equipo2 :[{ type : Schema.ObjectId, ref: 'Personal' }],
     codigo_sancion_equipo2 :{type: Schema.ObjectId, ref:'Sancion'},
-    observacion_equipo2: String
+    observacion_equipo2: String,
+    primera_segunda:Number
 });
 
 
