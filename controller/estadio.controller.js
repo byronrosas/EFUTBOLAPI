@@ -9,12 +9,11 @@ var Estadio = require('../models/estadio.model');
 function saveEstadio(req,res){
     var estadio=new Estadio();
     var params=req.body;
-    estadio.nombre_estadio=params.nombre;
-    estadio.ruta_estadio=params.ruta;
-    estadio.direccion_estadio=params.direccion;
-    estadio.observacion_estadio=params.observacion;
-    estadio.imagen_estadio=null;
-    if (req.files) {
+    estadio.nombre_estadio=params.nombre_estadio;
+    estadio.ruta_estadio=params.ruta_estadio;
+    estadio.direccion_estadio=params.direccion_estadio;
+    estadio.observacion_estadio=params.observacion_estadio;
+    if (req.files && req.files.imagen_estadio != undefined) {
         
         var file_path = req.files.imagen_estadio.path;
         var file_split = file_path.split('\\');
@@ -45,9 +44,18 @@ function saveEstadio(req,res){
             });
         }
     } else {
-        res.status(200).send({
-            message: "No ha subido Ninguna Imagen"
+        estadio.save((err, estadioGuardado) => {
+            if (err) {
+                res.status(500).send({ mensaje: "Error en el servidor" });
+            } else {
+                if (!estadioGuardado) {
+                    res.status(404).send({ mensaje: "Error al guardar el Estadio" });
+                } else {
+                    res.status(200).send({ estadio : estadioGuardado });
+                }
+            }
         });
+
     }
 }
 
@@ -117,7 +125,7 @@ function updateEstadio(req, res) {
 }
 
 
-function getEstadios(){
+function getEstadios(req,res){
     Estadio.find({},(err,estadios)=>{
         if(err){
             res.status(500).send({ mensaje: "Error en el servidor" });
