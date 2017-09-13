@@ -22,7 +22,7 @@ var FechaSchema = Schema({
     tarjetas_roja_equipo2 :[{ type : Schema.ObjectId, ref: 'Personal' }],
     codigo_sancion_equipo2 :{type: Schema.ObjectId, ref:'Sancion'},
     observacion_equipo2: String,
-    primera_segunda:Number
+    primera_segunda:Number    
 });
 
 
