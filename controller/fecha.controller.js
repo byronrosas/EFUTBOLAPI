@@ -56,6 +56,7 @@ Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
                         fechas[i].forEach(function(f) {
                             var fecha = new Fecha();
                             fecha.n_fecha=i;
+                            fecha.primera_segunda=1;
                             fecha.estado_fecha=false;
                             fecha.id_categoria=params.id_categoria; 
                             if(f.e1=="Descanso"){
@@ -70,13 +71,13 @@ Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
                                 fecha.id_equipo2=f.e2;
                             }        
                             
-                            fecha.goles_equipo1=0;
-                            fecha.tarjetas_amarilla_equipo1=0;
-                            fecha.tarjetas_roja_equipo1=0;
+                            // fecha.goles_equipo1=0;
+                            // fecha.tarjetas_amarilla_equipo1=0;
+                            // fecha.tarjetas_roja_equipo1=0;
                             fecha.observacion_equipo1="No tiene observaciones."
-                            fecha.goles_equipo2=0;
-                            fecha.tarjetas_amarilla_equipo2=0;
-                            fecha.tarjetas_roja_equipo2=0;
+                            // fecha.goles_equipo2=0;
+                            // fecha.tarjetas_amarilla_equipo2=0;
+                            // fecha.tarjetas_roja_equipo2=0;
                             fecha.observacion_equipo2="No tiene observaciones."
                     
                             fecha.save((err,fechaGuardada) => {
@@ -102,6 +103,7 @@ Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
                         fechasInvertidas[i].forEach(function(f) {
                             var fecha = new Fecha();
                             fecha.n_fecha=i;
+                            fecha.primera_segunda=2;
                             fecha.estado_fecha=false;
                             fecha.id_categoria=params.id_categoria; 
                             if(f.e1=="Descanso"){
@@ -116,13 +118,13 @@ Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
                                 fecha.id_equipo2=f.e2;
                             }        
                             
-                            fecha.goles_equipo1=0;
-                            fecha.tarjetas_amarilla_equipo1=0;
-                            fecha.tarjetas_roja_equipo1=0;
+                            // fecha.goles_equipo1=0;
+                            // fecha.tarjetas_amarilla_equipo1=0;
+                            // fecha.tarjetas_roja_equipo1=0;
                             fecha.observacion_equipo1="No tiene observaciones."
-                            fecha.goles_equipo2=0;
-                            fecha.tarjetas_amarilla_equipo2=0;
-                            fecha.tarjetas_roja_equipo2=0;
+                            // fecha.goles_equipo2=0;
+                            // fecha.tarjetas_amarilla_equipo2=0;
+                            // fecha.tarjetas_roja_equipo2=0;
                             fecha.observacion_equipo2="No tiene observaciones."
                     
                             fecha.save((err,fechaGuardada) => {
@@ -170,13 +172,13 @@ Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
                                 fecha.id_equipo2=f.e2;
                             }        
                             
-                            fecha.goles_equipo1=0;
-                            fecha.tarjetas_amarilla_equipo1=0;
-                            fecha.tarjetas_roja_equipo1=0;
+                            // fecha.goles_equipo1=[];
+                            // fecha.tarjetas_amarilla_equipo1=[];
+                            // fecha.tarjetas_roja_equipo1=[];
                             fecha.observacion_equipo1="No tiene observaciones."
-                            fecha.goles_equipo2=0;
-                            fecha.tarjetas_amarilla_equipo2=0;
-                            fecha.tarjetas_roja_equipo2=0;
+                            // fecha.goles_equipo2=[];
+                            // fecha.tarjetas_amarilla_equipo2=[];
+                            // fecha.tarjetas_roja_equipo2=[];
                             fecha.observacion_equipo2="No tiene observaciones."
                     
                             fecha.save((err,fechaGuardada) => {
@@ -216,13 +218,13 @@ Fecha.remove({id_categoria:params.id_categoria},(err,data)=>{
                                 fecha.id_equipo2=f.e2;
                             }        
                             
-                            fecha.goles_equipo1=0;
-                            fecha.tarjetas_amarilla_equipo1=0;
-                            fecha.tarjetas_roja_equipo1=0;
+                            // fecha.goles_equipo1=[];
+                            // fecha.tarjetas_amarilla_equipo1=[];
+                            // fecha.tarjetas_roja_equipo1=[];
                             fecha.observacion_equipo1="No tiene observaciones."
-                            fecha.goles_equipo2=0;
-                            fecha.tarjetas_amarilla_equipo2=0;
-                            fecha.tarjetas_roja_equipo2=0;
+                            // fecha.goles_equipo2=[];
+                            // fecha.tarjetas_amarilla_equipo2=[];
+                            // fecha.tarjetas_roja_equipo2=[];
                             fecha.observacion_equipo2="No tiene observaciones."
                     
                             fecha.save((err,fechaGuardada) => {
@@ -323,7 +325,13 @@ function updateFecha(req,res){
 
 function getFechaByIdCategoria(req,res){
     var idCategoria=req.params.id_categoria;
-    Fecha.find({id_categoria:idCategoria},(err,fechasEncontradas)=>{
+    Fecha.find({id_categoria:idCategoria}).populate({
+        path: 'id_equipo1',        
+        populate: { path: 'personal_equipo' }
+      }).populate({
+        path: 'id_equipo2',        
+        populate: { path: 'personal_equipo' }
+      }).exec((err,fechasEncontradas)=>{
         if(err){
             res.status(500).send({ mensaje: "Error del servidor" });
         }else{
