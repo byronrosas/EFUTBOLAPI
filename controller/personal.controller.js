@@ -45,6 +45,7 @@ function savePersonal(req,res){
                     });
         
                 } else {
+                    console.log("Imagen no valida");
                     res.status(200).send({
                         mensaje: "Extension del archivo no valido"
                     });

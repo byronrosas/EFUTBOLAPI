@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var EquipoSchema = Schema({
-    nombre_equipo:String,
+    nombre_equipo:{type:String,unique: true,required: true},
     descripcion_equipo:String,
     anio_fundacion_equipo:Number,
     escudo_equipo:String,
