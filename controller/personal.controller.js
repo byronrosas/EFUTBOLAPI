@@ -55,8 +55,11 @@ function savePersonal(req,res){
                 //personal.url_foto_personal = "default_foto";
                 personal.save((err, personaGuardada) => {
                     if (err) {
-                        console.log("el Error = "+err);
-                        res.status(500).send({ mensaje: "Error en el servidor" });
+                        if(err.code === 11000){
+                            res.status(500).send({ mensaje: "El Número de Cédula ya existe en la base de datos"});    
+                        }else{
+                            res.status(500).send({ mensaje: "Error en el servidor" });
+                        }
                     } else {
                         if (!personaGuardada) {
                             res.status(404).send({ mensaje: "Error al guardar el Personal" });

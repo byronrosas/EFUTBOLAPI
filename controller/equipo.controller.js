@@ -20,6 +20,7 @@ function saveEquipo(req, res) {
     equipo.color_principal_equipo = params.color_principal_equipo;
     equipo.color_secundario_equipo = params.color_secundario_equipo;
     equipo.observacion_equipo = params.observacion_equipo;
+    equipo.estado_equipo = params.estado_equipo;
     // equipo.id_categoria = params.id_categoria;
 
             // equipo.personal_equipo=JSON.parse(params.personal_equipo);        
@@ -87,7 +88,8 @@ function updateEquipo(req, res) {
     update.personal_equipo=JSON.parse(update.personal_equipo);        
     update.logros_equipo=JSON.parse(update.logros_equipo);
     console.log(update);   
-    if (req.files && req.files.escudo_equipo!=undefined) {                
+    if (req.files && req.files.escudo_equipo!=undefined) {     
+                console.log("Con imagen")           
 				var file_path = req.files.escudo_equipo.path;
 				var file_split = file_path.split('\\');
 				var file_name = file_split[3];
@@ -136,7 +138,8 @@ function updateEquipo(req, res) {
 					});
 				}
 			} else {
-                console.log(update);				
+
+                console.log("Sin Imagen");				
                 Equipo.findByIdAndUpdate(equipoId, update, function (err, equipoActualizado) {
                     if (err) {
                         console.log(err);

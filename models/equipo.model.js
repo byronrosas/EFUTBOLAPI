@@ -11,7 +11,7 @@ var EquipoSchema = Schema({
     color_secundario_equipo:String,
     observacion_equipo:String,
     personal_equipo:[{ type : Schema.ObjectId, ref: 'Personal' }],
-    estado_equipo:{type:Boolean,default:true},
+    estado_equipo:Boolean,
     logros_equipo:[JSON]
 });
 
