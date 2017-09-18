@@ -42,7 +42,7 @@ function getCategorias(req, res) {
 
 function getTodasCategorias(req,res){
     var find = Categoria.find({})
-    find.exec(function (err, categorias) {
+    find.populate({path:'codigo_equipo'}).exec(function (err, categorias) {
         if (err) {
             res.status(500).send({ mensaje: "Error en el servidor" });
         } else {
