@@ -325,7 +325,8 @@ function updateFecha(req,res){
 
 function getFechaByIdCategoria(req,res){
     var idCategoria=req.params.id_categoria;
-    Fecha.find({id_categoria:idCategoria}).populate({path: 'goles_equipo1'}).populate({path: 'goles_equipo2'})
+    Fecha.find({id_categoria:idCategoria}).populate({path: 'goles_equipo1'})
+    .populate({path: 'goles_equipo2'}).populate({path:'id_estadio'})
     .populate({
         path: 'id_equipo1',        
         populate: { path: 'personal_equipo' }
