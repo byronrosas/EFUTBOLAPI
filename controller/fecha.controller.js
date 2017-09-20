@@ -350,6 +350,29 @@ function getFechaByIdCategoria(req,res){
     });
 }
 
+function getFechaByIdCategoriaParaGuardar(req,res){
+    var idCategoria=req.params.id_categoria;
+    Fecha.find({id_categoria:idCategoria})
+    .populate({
+        path: 'id_equipo1',        
+        populate: { path: 'personal_equipo' }
+      }).populate({
+        path: 'id_equipo2',        
+        populate: { path: 'personal_equipo' }
+      }).exec((err,fechasEncontradas)=>{
+        if(err){
+            res.status(500).send({ mensaje: "Error del servidor" });
+        }else{
+            if(!fechasEncontradas || fechasEncontradas.length==0)
+            {
+                res.status(404).send({ mensaje: "No se encontraron fechas para esta categoría." });
+            }else{
+                res.status(200).send({ fechasEncontradas })
+            }
+        }
+    });
+}
+
 function generarMatrizFechas(n,equiposId){
     var Fechas={};    
     var partidos={};
@@ -419,6 +442,7 @@ module.exports = {
     getFechaById,
     getFechas,
     updateFecha,
-    getFechaByIdCategoria
+    getFechaByIdCategoria,
+    getFechaByIdCategoriaParaGuardar
 
 }
