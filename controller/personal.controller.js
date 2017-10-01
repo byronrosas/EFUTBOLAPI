@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var Personal = require('../models/personal.model');
 
+var mongoXlsx = require('mongo-xlsx');
 
 function savePersonal(req,res){
     
@@ -76,6 +77,84 @@ function savePersonal(req,res){
     
 
 }
+
+
+function savePersonalXLS(req,res){
+    
+    var personal = new Personal();
+    // var params=req.body;
+    console.log("Aqui esta el contenido ----------->");
+    // console.log(params)
+
+    // personal.nombre_personal = params.nombre_personal ;
+    // personal.apellido_personal = params.apellido_personal ;
+    // personal.rol_personal = params.rol_personal ;
+    // personal.fecha_nacimiento_personal = params.fecha_nacimiento_personal ;
+    // personal.cedula_personal = params.cedula_personal ;
+    // personal.observacion_personal = params.observacion_personal ;
+
+    if (req.files && req.files.xls != undefined) {
+                console.log("Con Foto");
+                var file_path = req.files.xls.path;
+                var file_split = file_path.split('\\');
+                var file_name = file_split[3];
+                //console.log(file_split);
+                var ext_split = file_name.split('\.');
+                var file_ext = ext_split[1];
+                console.log("Ya casi");
+                if (file_ext == 'xls' || file_ext == 'xlsx' || file_ext == 'xlsm') {
+                    console.log("llege");
+                    var model=null;
+                           
+                    
+                    mongoXlsx.xlsx2MongoData('public/xls/personal/'+file_name, model, function(err, mongoData) {
+                            if(err) throw err;
+                            console.log('Mongo data:', mongoData); 
+                            // Personal.create(mongoData, function (err, results) {
+                            //     if(err) throw err;                                
+                            // });
+                            Personal.collection.insert(mongoData, function (err, results) {
+                                if(err) throw err;
+                                
+                                console.log("eeee:::"+results); 
+                                res.status(200).send({
+                                        message: "Se cargaron todos registros",
+                                        data:results
+                                    });                            
+                            });
+
+                        });       
+                    //console.log(equipo)
+                    // personal.save((err, personaGuardada) => {
+                    //     if (err) {
+                    //         res.status(500).send({ mensaje: "Error en el servidor" });
+                    //     } else {
+                    //         if (!personaGuardada) {
+                    //             res.status(404).send({ mensaje: "Error al guardar el Personal" });
+                    //         } else {
+                    //             res.status(200).send({ personal: personaGuardada });
+                    //         }
+                    //     }
+                    // });
+        
+                } else {
+                    console.log("Archivo no valido");
+                    res.status(200).send({
+                        mensaje: "Extension del archivo no valido"
+                    });
+                }
+            } else {
+                console.log("Sin Archivo");
+                //personal.url_foto_personal = "default_foto";
+                
+                res.status(404).send({
+                    message: "No ha subido Ninguna Archivo"
+                });
+            }
+    
+
+}
+
 
 function updatePersonal(req, res) {
     var personalID = req.params.id;
@@ -159,5 +238,6 @@ module.exports = {
     uploadImage,
     getImagenFile,
     updatePersonal,
-    deletePersonal
+    deletePersonal,
+    savePersonalXLS
 }

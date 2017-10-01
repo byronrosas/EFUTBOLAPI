@@ -8,7 +8,7 @@ var api = express.Router();
 var md_auth = require('../midddlewards/autenticated');
 
 var multipart = require('connect-multiparty');
-var carpeta_destino_imagen = multipart({uploadDir : './public/images/foto_personal'});
+var carpeta_destino_imagen = multipart({uploadDir : './public/xls/personal'});
 
 
 api.post('/guardar',[ md_auth.ensureAuth,carpeta_destino_imagen],PersonalController.savePersonal);
@@ -18,5 +18,6 @@ api.put('/actualizar/:id',md_auth.ensureAuth,PersonalController.updatePersonal);
 //api.post('/cargarImagen/:id',[md_auth.ensureAuth,md_upload],EquipoController.uploadImage);
 api.get('/imagen/:imageFile',PersonalController.getImagenFile);
 api.delete('/eliminar',md_auth.ensureAuth,PersonalController.deletePersonal);
+api.post('/saveXLS',[ md_auth.ensureAuth,carpeta_destino_imagen],PersonalController.savePersonalXLS);
 
 module.exports=api;
