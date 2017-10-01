@@ -329,14 +329,23 @@ function getFechaByIdCategoria(req,res){
     .populate({path:'codigo_sancion_equipo1'})
     .populate({path:'codigo_sancion_equipo2'})
     .populate({path: 'goles_equipo1'})
-    .populate({path: 'goles_equipo2'}).populate({path:'id_estadio'})
+    .populate({path: 'goles_equipo2'})
+    .populate({path:'id_estadio'})
+    .populate({path: 'tarjetas_amarilla_equipo1'})
+    .populate({path: 'tarjetas_amarilla_equipo2'})
     .populate({
         path: 'id_equipo1',        
         populate: { path: 'personal_equipo' }
-      }).populate({
+      })
+    .populate({
         path: 'id_equipo2',        
         populate: { path: 'personal_equipo' }
-      }).exec((err,fechasEncontradas)=>{
+      })
+    .populate({
+        path: 'tarjetas_roja_equipo1.id'
+      })
+    .populate({path: 'tarjetas_roja_equipo2.id'})
+      .exec((err,fechasEncontradas)=>{
         if(err){
             res.status(500).send({ mensaje: "Error del servidor" });
         }else{
@@ -344,7 +353,8 @@ function getFechaByIdCategoria(req,res){
             {
                 res.status(404).send({ mensaje: "No se encontraron fechas para esta categoría." });
             }else{
-                res.status(200).send({ fechasEncontradas })
+                res.status(200).send({ fechasEncontradas });
+                console.log(fechasEncontradas);
             }
         }
     });
