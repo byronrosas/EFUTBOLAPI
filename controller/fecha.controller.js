@@ -369,7 +369,8 @@ function getFechaByIdCategoriaParaGuardar(req,res){
       }).populate({
         path: 'id_equipo2',        
         populate: { path: 'personal_equipo' }
-      }).exec((err,fechasEncontradas)=>{
+      })
+      .exec((err,fechasEncontradas)=>{
         if(err){
             res.status(500).send({ mensaje: "Error del servidor" });
         }else{
