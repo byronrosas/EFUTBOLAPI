@@ -108,19 +108,28 @@ function savePersonalXLS(req,res){
                            
                     
                     mongoXlsx.xlsx2MongoData('public/xls/personal/'+file_name, model, function(err, mongoData) {
-                            if(err) throw err;
-                            console.log('Mongo data:', mongoData); 
+                            if(err)
+                            {
+                                res.status(500).send({ mensaje: "Error del servidor" });
+                            }else{
+                                console.log('Mongo data:', mongoData); 
+                            }                            
                             // Personal.create(mongoData, function (err, results) {
                             //     if(err) throw err;                                
                             // });
                             Personal.collection.insert(mongoData, function (err, results) {
-                                if(err) throw err;
-                                
-                                console.log("eeee:::"+results); 
-                                res.status(200).send({
-                                        message: "Se cargaron todos registros",
-                                        data:results
-                                    });                            
+                                if(err)
+                                {
+                                    res.status(500).send({ mensaje: "Error del servidor" });
+                                }else{
+                                    console.log("eeee:::"+results); 
+                                    res.status(200).send({
+                                            message: "Se cargaron todos registros",
+                                            data:results,
+                                            personalI:mongoData
+                                        });
+                                }
+                                                                                            
                             });
 
                         });       
