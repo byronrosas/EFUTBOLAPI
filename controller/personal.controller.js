@@ -82,7 +82,7 @@ function savePersonal(req,res){
 function savePersonalXLS(req,res){
     
     var personal = new Personal();
-    // var params=req.body;
+    var params=req.params.longActPersonal;
     console.log("Aqui esta el contenido ----------->");
     // console.log(params)
 
@@ -117,20 +117,26 @@ function savePersonalXLS(req,res){
                             // Personal.create(mongoData, function (err, results) {
                             //     if(err) throw err;                                
                             // });
-                            Personal.collection.insert(mongoData, function (err, results) {
-                                if(err)
-                                {
-                                    res.status(500).send({ mensaje: "Error del servidor" });
-                                }else{
-                                    console.log("eeee:::"+results); 
-                                    res.status(200).send({
-                                            message: "Se cargaron todos registros",
-                                            data:results,
-                                            personalI:mongoData
-                                        });
-                                }
-                                                                                            
-                            });
+                            if(mongoData.length<=(30-params))
+                            {
+                                Personal.collection.insert(mongoData, function (err, results) {
+                                    if(err)
+                                    {
+                                        res.status(500).send({ mensaje: "Error del servidor" });
+                                    }else{
+                                        console.log("eeee:::"+results); 
+                                        res.status(200).send({
+                                                message: "Se cargaron todos registros",
+                                                data:results,
+                                                personalI:mongoData
+                                            });
+                                    }
+                                                                                                
+                                });
+                            }else{
+                                res.status('404').send({ mensaje: "El archivo supera el número de jugadores (min:30)" });
+                            }
+                            
 
                         });       
                     //console.log(equipo)
