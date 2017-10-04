@@ -242,11 +242,30 @@ function deletePersonal(req, res) {
     });
 }
 
+function eliminarGrupoPersonal(req,res){
+    var query=JSON.parse(req.params.ar);
+    console.log("query");
+    console.log(query);
+    try {
+        query.forEach(function(element) {
+            Personal.findByIdAndRemove(element,(err,data)=>{
+                if(err) throw err;                            
+            
+            });
+        });   
+    } catch (error) {
+        res.status(500).send({ mensaje: "Error en el Servidor" });
+    }finally{
+        res.status(200).send({mensaje: "Registros eliminados"});
+    }        
+}
+
 module.exports = {
     savePersonal,
     uploadImage,
     getImagenFile,
     updatePersonal,
     deletePersonal,
-    savePersonalXLS
+    savePersonalXLS,
+    eliminarGrupoPersonal
 }

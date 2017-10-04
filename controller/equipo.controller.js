@@ -342,6 +342,18 @@ function updatePersonalEquipo(req, res) {
     
         });
     }
+
+    function deleteAllPersonalEquipo(req,res){
+        var equipoId = req.params.id; 
+        Equipo.findByIdAndUpdate(equipoId,{personal_equipo:[]},(err,eliminadoPersonal)=>{
+            if(err){
+                res.status(500).send({ mensaje: "Error en el Servidor" });
+            }else{
+                console.log(eliminadoPersonal);                                
+                res.status(200).send({mensaje: eliminadoPersonal});
+            }
+        });
+    }
 module.exports = {
     saveEquipo,
     updateEquipo,
@@ -352,5 +364,6 @@ module.exports = {
     getEquipos,
     updatePersonalEquipo,
     deleteEquipo,
-    deletPersonalEquipo
+    deletPersonalEquipo,
+    deleteAllPersonalEquipo
 }
