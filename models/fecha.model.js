@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var FechaSchema = Schema({
     n_fecha:Number,
     estado_fecha:Boolean, //Este es el estado de la fecha (Jugado:True o No jugado: False)
-    fecha:Date,
+    fecha:String,
     hora:String,
     id_categoria: { type: Schema.ObjectId, ref: 'Categoria'},
     id_estadio: { type: Schema.ObjectId, ref: 'Estadio'},
