@@ -292,18 +292,35 @@ function updatePersonalEquipo(req, res) {
     }
 
     function deletPersonalEquipo(req, res) {
+        console.log("Hola");
         var equipoId = req.params.idEquipo;
         var idPersonalDelet = req.body.personal_equipo;
         Equipo.findById(equipoId, (err, actualizado) => {
-            console.log("ARREGLO = " + actualizado.personal_equipo)
+            console.log("ARREGLO = " + actualizado.nombre_equipo);
+            console.log("ARREGLO = " + actualizado.personal_equipo);
             for (var index = 0; index < actualizado.personal_equipo.length; index++) {
+                console.log(index);
                 if (actualizado.personal_equipo[index] == idPersonalDelet) {
-                    actualizado.personal_equipo.split(index,1);
-                    console.log("ARREGLO = " + actualizado.personal_equipo);
+                    console.log("Array Base: "+ actualizado.personal_equipo[index]);
+                    console.log("id Personal: "+ idPersonalDelet);
+                    actualizado.personal_equipo.splice(index,1);
+                    console.log("ARREGLO NUEVO");
+                    var update = actualizado.personal_equipo;
+                    Equipo.findByIdAndUpdate(equipoId, {personal_equipo:update}, function (err, actualizadoPeronal) {
+                        if (err) {
+                            res.status(500).send({ mensaje: "Error en el Servidor" });
+                        } else {
+                            if (!actualizado) {
+                                res.status(404).send({ mensaje: "No se ha podido Guardar el Equipo en la Categoria" });
+                            } else {
+                                res.status(200).send({ equipo: actualizadoPeronal });
+                            }
+                        }
+                    });
                     break;
                 }
             }
-        
+            
         });
         
     }
