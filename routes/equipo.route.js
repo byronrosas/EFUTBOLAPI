@@ -26,5 +26,6 @@ api.put('/actualizar/:id',[ md_auth.ensureAuth,carpeta_destino_imagen],EquipoCon
 api.get('/imagen/:imageFile',EquipoController.getImagenFile);
 api.delete('/delete/:id',md_auth.ensureAuth,EquipoController.deleteEquipo);
 api.put('/agregarPERSONAL/:idEquipo',md_auth.ensureAuth,EquipoController.updatePersonalEquipo);
+api.delete('/quitarPERSONAL/:idEquipo,'md_auth.ensureAuth,EquipoController.deletPersonalEquipo);
 
 module.exports=api;

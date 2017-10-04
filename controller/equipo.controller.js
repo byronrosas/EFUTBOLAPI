@@ -291,6 +291,23 @@ function updatePersonalEquipo(req, res) {
         
     }
 
+    function deletPersonalEquipo(req, res) {
+        var equipoId = req.params.idEquipo;
+        var idPersonalDelet = req.body.personal_equipo;
+        Equipo.findById(equipoId, (err, actualizado) => {
+            console.log("ARREGLO = " + actualizado.personal_equipo)
+            for (var index = 0; index < actualizado.personal_equipo.length; index++) {
+                if (actualizado.personal_equipo[index] == idPersonalDelet) {
+                    actualizado.personal_equipo.split(index,1);
+                    console.log("ARREGLO = " + actualizado.personal_equipo);
+                    break;
+                }
+            }
+        
+        });
+        
+    }
+
     function deleteEquipo(req, res){
         var equipoId = req.params.id; 
     
@@ -334,5 +351,6 @@ module.exports = {
     getEquiposCategoria,
     getEquipos,
     updatePersonalEquipo,
-    deleteEquipo
+    deleteEquipo,
+    deletPersonalEquipo
 }
