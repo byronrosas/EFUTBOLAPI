@@ -6,7 +6,7 @@ var PersonalShema=new Schema({
     nombre_personal:String, //
     apellido_personal:String, //
     rol_personal:String, //
-    fecha_nacimiento_personal:Date, //
+    fecha_nacimiento_personal:String, //
     goles_personal:{type:Number,default:0},// estaba sin una l
     TA_personal:{type:Number,default:0},//
     TR_personal:{type:Number,default:0},//
